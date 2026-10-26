@@ -1,0 +1,10 @@
+# Librerías para ejecutar los scripts de Python que genera la app
+# Libraries needed to run the Python scripts the app generates
+pandas
+numpy
+scipy
+statsmodels
+matplotlib
+patsy
+lifelines        # solo supervivencia / survival only (requiere pandas 2.x / needs pandas 2.x)
+linearmodels     # solo xtreg / ivregress / only xtreg / ivregress
