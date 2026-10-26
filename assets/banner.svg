@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1280" height="320" viewBox="0 0 1280 320" role="img" aria-labelledby="t d">
+  <title id="t">PythonStataTranslate</title>
+  <desc id="d">Traductor bidireccional Stata a Python y Python a Stata / Two-way Stata to Python translator</desc>
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0f172a"/>
+      <stop offset="1" stop-color="#134e4a"/>
+    </linearGradient>
+    <linearGradient id="line" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0" stop-color="#2dd4bf"/>
+      <stop offset="1" stop-color="#60a5fa"/>
+    </linearGradient>
+  </defs>
+
+  <rect width="1280" height="320" rx="18" fill="url(#bg)"/>
+  <rect x="64" y="64" width="72" height="5" rx="2.5" fill="url(#line)"/>
+
+  <text x="64" y="132" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="50" font-weight="700" fill="#ffffff">PythonStataTranslate</text>
+  <text x="64" y="176" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="26" fill="#99f6e4">Stata ⇄ Python</text>
+  <text x="64" y="212" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="16" fill="#cbd5e1">Traduce do-files y scripts en ambos sentidos · Translates do-files and scripts both ways</text>
+
+  <g font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="14" fill="#e2e8f0">
+    <rect x="64" y="236" width="128" height="30" rx="15" fill="#ffffff" fill-opacity="0.10" stroke="#2dd4bf" stroke-opacity="0.6"/>
+    <text x="128" y="256" text-anchor="middle">Supervivencia</text>
+    <rect x="204" y="236" width="244" height="30" rx="15" fill="#ffffff" fill-opacity="0.10" stroke="#2dd4bf" stroke-opacity="0.6"/>
+    <text x="326" y="256" text-anchor="middle">Propensity score · IPTW · PSM</text>
+    <rect x="460" y="236" width="76" height="30" rx="15" fill="#ffffff" fill-opacity="0.10" stroke="#2dd4bf" stroke-opacity="0.6"/>
+    <text x="498" y="256" text-anchor="middle">ES · EN</text>
+  </g>
+
+  <!-- tarjeta Stata -->
+  <g font-family="Consolas, 'Courier New', monospace" font-size="11.5">
+    <rect x="690" y="62" width="230" height="196" rx="12" fill="#0b1220" stroke="#2dd4bf" stroke-opacity="0.7"/>
+    <text x="706" y="88" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#2dd4bf">Stata (.do)</text>
+    <text x="706" y="122" fill="#93c5fd">use</text><text x="730" y="122" fill="#e2e8f0">"datos.dta", clear</text>
+    <text x="706" y="150" fill="#93c5fd">stset</text><text x="742" y="150" fill="#e2e8f0">time, failure(event)</text>
+    <text x="706" y="178" fill="#93c5fd">stcox</text><text x="742" y="178" fill="#e2e8f0">treat age i.sex</text>
+    <text x="706" y="206" fill="#93c5fd">teffects ipw</text><text x="782" y="206" fill="#e2e8f0">(y) (treat x)</text>
+    <text x="706" y="234" fill="#64748b"># comentarios se conservan</text>
+  </g>
+
+  <!-- flecha -->
+  <text x="962" y="176" text-anchor="middle" font-family="Segoe UI Symbol, Segoe UI, Arial, sans-serif" font-size="40" fill="url(#line)">⇄</text>
+
+  <!-- tarjeta Python -->
+  <g font-family="Consolas, 'Courier New', monospace" font-size="11.5">
+    <rect x="1004" y="62" width="212" height="196" rx="12" fill="#0b1220" stroke="#60a5fa" stroke-opacity="0.7"/>
+    <text x="1020" y="88" font-family="Segoe UI, Helvetica, Arial, sans-serif" font-size="13" font-weight="700" fill="#60a5fa">Python (.py)</text>
+    <text x="1020" y="122" fill="#e2e8f0">pd.read_stata(</text><text x="1020" y="136" fill="#fbbf24">  'datos.dta')</text>
+    <text x="1020" y="164" fill="#e2e8f0">df['_t'] = df['time']</text>
+    <text x="1020" y="192" fill="#e2e8f0">cph = cox_fit(df,</text><text x="1020" y="206" fill="#fbbf24">  'treat + age + C(sex)')</text>
+    <text x="1020" y="234" fill="#64748b"># advertencias claras</text>
+  </g>
+</svg>

@@ -1,6 +1,8 @@
 """Interfaz del Traductor Stata <-> Python / Stata <-> Python Translator GUI (tkinter)."""
+import ctypes
 import os
 import tkinter as tk
+import tkinter.font as tkfont
 import webbrowser
 from tkinter import filedialog, messagebox, ttk
 from tkinter.scrolledtext import ScrolledText
@@ -35,9 +37,30 @@ def leer(path):
             pass
 
 
+def dpi_aware():
+    """Sin esto Windows reescala la ventana como imagen y todo se ve borroso en pantallas HiDPI."""
+    try:
+        ctypes.windll.shcore.SetProcessDpiAwareness(2)  # por monitor
+    except Exception:
+        try:
+            ctypes.windll.user32.SetProcessDPIAware()
+        except Exception:
+            pass
+
+
 def main():
+    dpi_aware()
     root = tk.Tk()
-    root.geometry("1150x740")
+    k = root.winfo_fpixels("1i") / 96  # factor de escala de la pantalla (1.0 = 100 %)
+    root.geometry(f"{int(1150 * k)}x{int(740 * k)}")
+    root.minsize(int(800 * k), int(500 * k))
+    for n in ("TkDefaultFont", "TkTextFont", "TkMenuFont", "TkHeadingFont"):
+        tkfont.nametofont(n).configure(family="Segoe UI", size=10)
+    try:
+        ttk.Style().theme_use("vista")
+    except tk.TclError:
+        pass
+    fuente = tkfont.Font(family="Consolas", size=11)
     lang, modo, ruta = tk.StringVar(value="es"), tk.StringVar(value="s2p"), [None]
     T = lambda k: UI[lang.get()][k]
 
@@ -99,6 +122,9 @@ def main():
         root.clipboard_clear()
         root.clipboard_append(salida.get("1.0", "end"))
 
+    def zoom(d):
+        fuente.configure(size=max(7, min(32, fuente.cget("size") + d)))
+
     barra = ttk.Frame(root)
     barra.pack(fill="x", padx=8, pady=6)
     radios = {k: ttk.Radiobutton(barra, value=k, variable=modo, command=textos) for k in MODOS}
@@ -108,6 +134,8 @@ def main():
                (("open", abrir), ("translate", traducir), ("save", guardar), ("copy", copiar))}
     for w in botones.values():
         w.pack(side="left", padx=4)
+    for t, d in (("A−", -1), ("A+", 1)):  # tamaño del texto (también Ctrl + rueda del ratón)
+        ttk.Button(barra, text=t, width=3, command=lambda d=d: zoom(d)).pack(side="left", padx=1)
     combo = ttk.Combobox(barra, values=list(IDIOMAS), state="readonly", width=9)
     combo.set("Español")
     combo.bind("<<ComboboxSelected>>", cambiar_idioma)
@@ -123,8 +151,8 @@ def main():
     lin, lout = ttk.Label(izq), ttk.Label(der)
     lin.pack(anchor="w")
     lout.pack(anchor="w")
-    entrada = ScrolledText(izq, font=("Consolas", 10), undo=True, wrap="none")
-    salida = ScrolledText(der, font=("Consolas", 10), undo=True, wrap="none")
+    entrada = ScrolledText(izq, font=fuente, undo=True, wrap="word")
+    salida = ScrolledText(der, font=fuente, undo=True, wrap="word")
     entrada.pack(fill="both", expand=True)
     salida.pack(fill="both", expand=True)
 
@@ -138,8 +166,10 @@ def main():
     link.bind("<Button-1>", lambda _: webbrowser.open(REPO))
     lrepo = ttk.Label(pie)
     lrepo.pack(side="right", padx=4)
-    av = ScrolledText(root, height=8, font=("Consolas", 10), state="disabled", wrap="word")
+    av = ScrolledText(root, height=8, font=fuente, state="disabled", wrap="word")
     av.pack(fill="x", padx=8, pady=(0, 8))
+    for w in (entrada, salida, av):
+        w.bind("<Control-MouseWheel>", lambda e: (zoom(1 if e.delta > 0 else -1), "break")[1])
     textos()
     root.mainloop()
 
